@@ -1,5 +1,6 @@
 
 import random
+import time
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -80,46 +81,33 @@ class Board:
                         defn = self.board[x+i][y+j]
                         if efectiveness[att][defn] == 2:
                             new_board.board[x+i][y+j] = att
-                            #print(types[att] + ' beats ' + types[defn])
         self.board = new_board.board
-        #print()
-        #new_board.print()
-        #print()
-    
+        
+    def play(self, n):
+        # Create subplots
+        figure, ax = plt.subplots()
+        mat = ax.matshow(self.board, cmap=c)
+        # GUI
+        plt.ion()
+        plt.axis('off')
+
+        for i in range(n):
+            self.get_next_state()
+            mat.set_data(self.board)
+            figure.canvas.draw()
+            figure.canvas.flush_events()            
+            plt.pause(0.3)
+        plt.show()
+
     def drawBoard(self):
         plt.matshow(self.board,cmap=c,norm=n)
         plt.axis('off')
         plt.show()
-        #plt.figure(figsize=(10,10))
-        #plt.matshow(self.board, cmap=c, norm=n)
-        #plt.axis('off')
-        #plt.show()
 
 if __name__ == '__main__':
-    print(len(types))
+    
     width = int(input("Width: "))
     height = int(input("Height: "))
     board = Board(width, height)
-    #board.print()
-    board.drawBoard()
-    #print()
-    board.get_next_state()
-    #board.print()
-    board.drawBoard()
-    
-    #att = int(input("Attacker: "))
-    #print("Attacker: ", types[att])
-
-    #defn = int(input("Defender: "))
-    #print("Defender: ", types[defn])
-
-    #result = efectiveness[att][defn]
-    #if (result == -1):
-    #    print("Attacker and Defender are neutral")
-    #elif (result == 0):
-    #    print("Attacker has no effect on Defender")
-    #elif (result == 0.5):
-    #    print("Attacker is Not very effective against Defender")
-    #elif (result == 2):
-    #    print("Attacker is super effective against Defender")
+    board.play(300)
 
